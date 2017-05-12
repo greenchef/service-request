@@ -1,5 +1,5 @@
 {
-  "name": "service-request",
+  "name": "@greenchef/service-request",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
