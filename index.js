@@ -14,16 +14,20 @@ function resolveUri(opts) {
   }
   return nodefn
     .call(dns.resolveSrv, u.hostname)
-    .then(srvs => {
+    .then(function(srvs) {
       return when
-        .map(srvs, srv => {
+        .map(srvs, function(srv) {
           return nodefn
             .call(dns.resolve, srv.name)
-            .then(a => a + ':' + srv.port);
-        })
+            .then(function(a) { 
+              return a + ':' + srv.port;
+            });
+        });
     })
-    .then(hosts => u.protocol + '//' + (u.auth ? u.auth + '@' : '') + hosts.join(',') + u.path)
-    .then(host => {
+    .then(function(hosts) {
+      return u.protocol + '//' + (u.auth ? u.auth + '@' : '') + hosts.join(',') + u.path
+    })
+    .then(function(host) {
       opts[key] = host;
       return opts;
     });
@@ -31,8 +35,8 @@ function resolveUri(opts) {
 
 function resolveRequest(opts) {
   return resolveUri(opts)
-    .otherwise(() => opts)
-    .then(opts => {
+    .otherwise(function(){ return opts; } )
+    .then(function(opts) {
       return when(request(opts));
     });
 }
@@ -40,7 +44,7 @@ function resolveRequest(opts) {
 function resolveMongoUri(uri) {
   var orig_uri = uri;
   return resolveUri({'uri': uri})
-    .then(host => {
+    .then(function(host) {
       return host.uri;
     })
     .otherwise(orig_uri);
@@ -48,22 +52,22 @@ function resolveMongoUri(uri) {
 
 function connectToMongo(uri) {
   return resolveMongoUri(uri)
-    .then(uri => {
+    .then(function(uri) {
       return mongoose.connect(uri, {server: {reconnectTries: 10}});
     })
-    .otherwise(err => {
+    .otherwise(function(err) {
       logger.warn('Failed to connect to mongo on startup - retry in 10s: %s', err.stack, {});
       mongoose.disconnect();
-      setTimeout(function () { connectToMongo(uri).done(); }, 10000);
+      setTimeout(function () { return connectToMongo(uri).done(); }, 10000);
     });
 }
 
 function connectToAgenda(uri,agenda){
   return resolveMongoUri(uri)
-    .then(uri => {
+    .then(function(uri) {
       agenda.agenda.agenda.database(uri, 'jobSchedule').maxConcurrency(100);
     })
-    .otherwise(err => {
+    .otherwise(function(err) {
       logger.warn('failed to connect to agenda on startup - retry in 10s: %s', err.stack, {});
       setTimeout(function() { connectToAgenda(uri,agenda).done(); }, 10000);
     });

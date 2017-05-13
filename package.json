@@ -1,6 +1,6 @@
 {
   "name": "@greenchef/service-request",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mongoose": "^4.9.8",
     "node-dns": "^0.1.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
