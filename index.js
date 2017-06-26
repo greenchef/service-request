@@ -53,7 +53,7 @@ function resolveMongoUri(uri) {
 function connectToMongo(uri) {
   return resolveMongoUri(uri)
     .then(function(uri) {
-      return mongoose.connect(uri, {server: {reconnectTries: 10}});
+      return mongoose.connect(uri, {useMongoClient: true, server: {reconnectTries: 10}});
     })
     .otherwise(function(err) {
       logger.warn('Failed to connect to mongo on startup - retry in 10s: %s', err.stack, {});
