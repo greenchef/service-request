@@ -129,5 +129,6 @@ if(process.env.OVERRIDE_DNS) {
 }
 
 module.exports.resolveRequest = resolveRequest;
+module.exports.resolveRequestForAllHosts = resolveRequestForAllHosts;
 module.exports.connectToMongo = connectToMongo;
 module.exports.connectToAgenda = connectToAgenda;
