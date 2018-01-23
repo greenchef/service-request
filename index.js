@@ -7,12 +7,22 @@ const logger = require('winston');
 const mongoose = require('mongoose');
 
 /**
+* Helper function to get either 'uri' or 'url' based on what field is populated
+* in the HTTP request options.
+* @param {Object} opts - HTTP request options (should have a uri or url prop present)
+* @return {string} 'uri' or 'url'
+*/
+function uriOrUrlKey(opts) {
+  return opts.uri ? 'uri' : 'url';
+}
+
+/**
 * Helper function for parsing the uri/url out of HTTP request options
 * @param {Object} opts - HTTP request options
 * @return {Object} parsedUrl
 */
 function getParsedUrl(opts) {
-  return url.parse(opts[opts.uri ? 'uri' : 'url']);
+  return url.parse(opts[uriOrUrlKey(opts)]);
 }
 
 /**
@@ -61,7 +71,7 @@ function resolveUri(opts) {
       return u.protocol + '//' + (u.auth ? u.auth + '@' : '') + hosts.join(',') + u.path
     })
     .then(function(host) {
-      opts[opts.uri ? 'uri' : 'url'] = host;
+      opts[uriOrUrlKey(opts)] = host;
       return opts;
     });
 }
@@ -79,7 +89,7 @@ function resolveRequestForAllHosts(opts) {
     .then(function(hostUrls) { // Map hostUrls to opts array
       return hostUrls.map(function(hostUrl) {
         return Object.assign({}, opts, {
-          [opts.uri ? 'uri' : 'url']: hostUrl,
+          [uriOrUrlKey(opts)]: hostUrl,
         })
       })
     })
