@@ -6,29 +6,62 @@ const dns = require('dns');
 const logger = require('winston');
 const mongoose = require('mongoose');
 
-function resolveUri(opts) {
-  const key = opts.uri ? 'uri' : 'url';
-  var u = url.parse(opts[key]);
-  if(process.env.ENVIRONMENT_NAME) {
-    host = process.env.ENVIRONMENT_NAME+"."+host;
-  }
+/**
+* Helper function for parsing the uri/url out of HTTP request options
+* @param {Object} opts - HTTP request options
+* @return {Object} parsedUrl
+*/
+function getParsedUrl(opts) {
+  return url.parse(opts[opts.uri ? 'uri' : 'url']);
+}
+
+/**
+* Uses dns to find the hosts for a given hostname
+* @param {string} hostname
+* @return {string[]} hosts (address:port)
+*/
+function getHosts(hostname) {
   return nodefn
-    .call(dns.resolveSrv, u.hostname)
+    .call(dns.resolveSrv, hostname)
     .then(function(srvs) {
       return when
         .map(srvs, function(srv) {
           return nodefn
             .call(dns.resolve, srv.name)
-            .then(function(a) { 
+            .then(function(a) {
               return a + ':' + srv.port;
             });
         });
     })
+}
+
+/**
+* Given HTTP request options, returns the list of host urls that match
+* @param {Object} opts - HTTP request options
+* @return {string[]} The host urls
+*/
+function getHostUrls(opts) {
+  const u = getParsedUrl(opts);
+
+  return getHosts(u.hostname)
+    .then(function(hosts) {
+      if (!hosts) return [];
+
+      return hosts.map(function(host) {
+        return u.protocol + '//' + (u.auth ? u.auth + '@' : '') + host + u.path
+      })
+    });
+}
+
+function resolveUri(opts) {
+  const u = getParsedUrl(opts);
+
+  return getHosts(u.hostname)
     .then(function(hosts) {
       return u.protocol + '//' + (u.auth ? u.auth + '@' : '') + hosts.join(',') + u.path
     })
     .then(function(host) {
-      opts[key] = host;
+      opts[opts.uri ? 'uri' : 'url'] = host;
       return opts;
     });
 }
@@ -39,6 +72,23 @@ function resolveRequest(opts) {
     .then(function(opts) {
       return when(request(opts));
     });
+}
+
+function resolveRequestForAllHosts(opts) {
+  return getHostUrls(opts)
+    .then(function(hostUrls) { // Map hostUrls to opts array
+      return hostUrls.map(function(hostUrl) {
+        return Object.assign({}, opts, {
+          [opts.uri ? 'uri' : 'url']: hostUrl,
+        })
+      })
+    })
+    .then(function(optsArray) {
+      return when.map(optsArray, request);
+    })
+    .otherwise(function(err) {
+      logger.warn('Failed to resolve request for all hosts. Error: %s', err);
+    })
 }
 
 function resolveMongoUri(uri) {
@@ -78,6 +128,6 @@ if(process.env.OVERRIDE_DNS) {
   dns.setServers([process.env.OVERRIDE_DNS]);
 }
 
-module.exports.connectToAgenda = connectToAgenda;
-module.exports.connectToMongo = connectToMongo;
 module.exports.resolveRequest = resolveRequest;
+module.exports.connectToMongo = connectToMongo;
+module.exports.connectToAgenda = connectToAgenda;
