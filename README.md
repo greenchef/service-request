@@ -25,14 +25,14 @@ return when(service.connectToMongo('your-uri-here'))
 *resolveRequest*
 ```
 const service = require('@greenchef/service-request');
-return when(service.resolveRequest('your-uri-here'))
+return when(service.resolveRequest(requestOptions))
   .then((resolution) => { ... });
 ```
 
 *resolveRequestForAllHosts*
 ```
 const service = require('@greenchef/service-request');
-return when(service.resolveRequestForAllHosts('your-uri-here'))
+return when(service.resolveRequestForAllHosts(requestOptions))
   .then((resolutions) => { ... });
 ```
 
