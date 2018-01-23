@@ -9,22 +9,31 @@ Centralized functionality for connecting to services.
 # Using This Module
 ## Agenda
 ```
-var agenda = require('./lib/agenda');
-var service = require('@greenchef/service-request');
-return when(service.connectToAgenda('your-uri-here',agenda))
+const agenda = require('./lib/agenda');
+const service = require('@greenchef/service-request');
+return when(service.connectToAgenda('your-uri-here', agenda))
   .then(() => { ... });
 ```
 ## Mongo
 ```
-var service = require('@greenchef/service-request');
+const service = require('@greenchef/service-request');
 return when(service.connectToMongo('your-uri-here'))
   .then(() => { ... });
 ```
 ## Request
+
+*resolveRequest*
 ```
-var service = require('@greenchef/service-request');
+const service = require('@greenchef/service-request');
 return when(service.resolveRequest('your-uri-here'))
-  .then(() => { ... });
+  .then((resolution) => { ... });
+```
+
+*resolveRequestForAllHosts*
+```
+const service = require('@greenchef/service-request');
+return when(service.resolveRequestForAllHosts('your-uri-here'))
+  .then((resolutions) => { ... });
 ```
 
 # More NPM info
