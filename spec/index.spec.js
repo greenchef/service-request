@@ -1,4 +1,5 @@
-const { uriOrUrlKey, getParsedUrl } = require('../index.js');
+const serviceRequest = require('../index.js');
+const { uriOrUrlKey, getParsedUrl } = serviceRequest;
 
 describe('uriOrUrlKey', function() {
   it('should return "url" for empty object', function() {
@@ -26,7 +27,7 @@ describe('getParsedUrl', function() {
   beforeEach(function() {
     this.opts = {
       uri: 'https://testdoman/cache',
-    }
+    };
   });
 
   it('should parse a hostname prop', function() {
@@ -47,5 +48,11 @@ describe('getParsedUrl', function() {
   it('should parse a path prop', function() {
     const parsedUrl = getParsedUrl(this.opts);
     expect(parsedUrl.path).toBeDefined();
+  });
+
+  it('should call uriOrUrlKey', function() {
+    const spy = spyOn(serviceRequest, 'uriOrUrlKey').and.callThrough();
+    const parsedUrl = getParsedUrl(this.opts);
+    expect(spy).toHaveBeenCalled();
   });
 });

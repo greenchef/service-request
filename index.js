@@ -22,7 +22,7 @@ module.exports.uriOrUrlKey = function(opts) { // exported for testing
 * @return {Object} parsedUrl
 */
 module.exports.getParsedUrl = function(opts) { // exported for testing
-  return url.parse(opts[uriOrUrlKey(opts)]);
+  return url.parse(opts[module.exports.uriOrUrlKey(opts)]);
 }
 
 /**
@@ -51,7 +51,7 @@ function getHosts(hostname) {
 * @return {string[]} The host urls
 */
 function getHostUrls(opts) {
-  const u = getParsedUrl(opts);
+  const u = module.exports.getParsedUrl(opts);
 
   return getHosts(u.hostname)
     .then(function(hosts) {
@@ -64,7 +64,7 @@ function getHostUrls(opts) {
 }
 
 function resolveUri(opts) {
-  const u = getParsedUrl(opts);
+  const u = module.exports.getParsedUrl(opts);
 
   // Was told to keep for future Saph and Kevin work
   // if (process.env.ENVIRONMENT_NAME) {
