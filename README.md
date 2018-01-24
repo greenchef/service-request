@@ -37,7 +37,9 @@ return when(service.resolveRequestForAllHosts(requestOptions))
 ```
 
 ## Testing
-`npm test`
+To run: `npm test`
+
+New spec files need to be in the `/spec` directory.
 
 # More NPM info
 https://confluence.greenchef.com/x/h418
