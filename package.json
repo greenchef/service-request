@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "mocha --recursive"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +18,7 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "jasmine": "^2.9.0",
-    "jasmine-core": "^2.9.1"
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.1"
   }
 }
