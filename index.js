@@ -12,20 +12,18 @@ const mongoose = require('mongoose');
 * @param {Object} opts - HTTP request options (should have a uri or url prop present)
 * @return {string} 'uri' or 'url'
 */
-function uriOrUrlKey(opts) {
+module.exports.uriOrUrlKey = function(opts) { // exported for testing
   return opts.uri ? 'uri' : 'url';
 }
-module.exports.uriOrUrlKey = uriOrUrlKey; // exported for testing
 
 /**
 * Helper function for parsing the uri/url out of HTTP request options
 * @param {Object} opts - HTTP request options
 * @return {Object} parsedUrl
 */
-function getParsedUrl(opts) {
+module.exports.getParsedUrl = function(opts) { // exported for testing
   return url.parse(opts[uriOrUrlKey(opts)]);
 }
-module.exports.getParsedUrl = getParsedUrl; // exported for testing
 
 /**
 * Uses dns to find the hosts for a given hostname
@@ -68,6 +66,11 @@ function getHostUrls(opts) {
 function resolveUri(opts) {
   const u = getParsedUrl(opts);
 
+  // Was told to keep for future Saph and Kevin work
+  // if (process.env.ENVIRONMENT_NAME) {
+  //   host = process.env.ENVIRONMENT_NAME + '.' + host;
+  // }
+
   return getHosts(u.hostname)
     .then(function(hosts) {
       return u.protocol + '//' + (u.auth ? u.auth + '@' : '') + hosts.join(',') + u.path
@@ -78,7 +81,7 @@ function resolveUri(opts) {
     });
 }
 
-function resolveRequest(opts) {
+module.exports.resolveRequest = function(opts) {
   return resolveUri(opts)
     .otherwise(function(){ return opts; } )
     .then(function(opts) {
@@ -86,7 +89,7 @@ function resolveRequest(opts) {
     });
 }
 
-function resolveRequestForAllHosts(opts) {
+module.exports.resolveRequestForAllHosts = function(opts) {
   return getHostUrls(opts)
     .then(function(hostUrls) { // Map hostUrls to opts array
       return hostUrls.map(function(hostUrl) {
@@ -112,7 +115,7 @@ function resolveMongoUri(uri) {
     .otherwise(orig_uri);
 }
 
-function connectToMongo(uri) {
+module.exports.connectToMongo = function(uri) {
   return resolveMongoUri(uri)
     .then(function(uri) {
       return mongoose.connect(uri, {useMongoClient: true, server: {reconnectTries: 10}});
@@ -124,7 +127,7 @@ function connectToMongo(uri) {
     });
 }
 
-function connectToAgenda(uri,agenda){
+module.exports.connectToAgenda = function(uri, agenda){
   return resolveMongoUri(uri)
     .then(function(uri) {
       agenda.agenda.agenda.database(uri, 'jobSchedule').maxConcurrency(100);
@@ -139,8 +142,3 @@ if(process.env.OVERRIDE_DNS) {
   console.log('using alternate nameserver:', process.env.OVERRIDE_DNS);
   dns.setServers([process.env.OVERRIDE_DNS]);
 }
-
-module.exports.resolveRequest = resolveRequest;
-module.exports.resolveRequestForAllHosts = resolveRequestForAllHosts;
-module.exports.connectToMongo = connectToMongo;
-module.exports.connectToAgenda = connectToAgenda;
