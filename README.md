@@ -36,5 +36,8 @@ return when(service.resolveRequestForAllHosts(requestOptions))
   .then((resolutions) => { ... });
 ```
 
+## Testing
+`npm test`
+
 # More NPM info
 https://confluence.greenchef.com/x/h418

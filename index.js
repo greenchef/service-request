@@ -15,6 +15,7 @@ const mongoose = require('mongoose');
 function uriOrUrlKey(opts) {
   return opts.uri ? 'uri' : 'url';
 }
+module.exports.uriOrUrlKey = uriOrUrlKey; // exported for testing
 
 /**
 * Helper function for parsing the uri/url out of HTTP request options
@@ -24,6 +25,7 @@ function uriOrUrlKey(opts) {
 function getParsedUrl(opts) {
   return url.parse(opts[uriOrUrlKey(opts)]);
 }
+module.exports.getParsedUrl = getParsedUrl; // exported for testing
 
 /**
 * Uses dns to find the hosts for a given hostname
