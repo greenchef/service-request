@@ -1,0 +1,11 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "arrow-parens": 0,
+    "object-curly-newline": 0
+  },
+  "globals": {
+    "_": false,
+    "moment": false
+  }
+}

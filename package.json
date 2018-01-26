@@ -1,12 +1,13 @@
 {
   "name": "@greenchef/service-request",
   "version": "1.1.0",
-  "description": "",
+  "description": "A helper package for service connections and request resolutions.",
   "main": "index.js",
   "scripts": {
+    "build": "babel src -d dist",
     "test": "mocha --recursive"
   },
-  "author": "",
+  "author": "GreenChef",
   "license": "ISC",
   "dependencies": {
     "mongoose": "^4.11.0",
@@ -18,6 +19,11 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-airbnb": "^2.4.0",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
     "mocha": "^5.0.0",
     "sinon": "^4.2.1"
   }

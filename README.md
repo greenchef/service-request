@@ -36,10 +36,18 @@ return when(service.resolveRequestForAllHosts(requestOptions))
   .then((resolutions) => { ... });
 ```
 
+# Working with this Module
+
+First: `npm install`
+
 ## Testing
 To run: `npm test`
 
-New spec files need to be in the `/spec` directory.
+New spec files need to be in the `/test` directory.
+
+## Building
+
+`npm run build`
 
 # More NPM info
 https://confluence.greenchef.com/x/h418
