@@ -48,7 +48,7 @@ function getHostUrl(opts) {
     .then((hosts = []) => {
       if (!hosts) throw Error(`No valid host found for url: ${u}`);
 
-      return `${u.protocol}//${u.auth ? `${u.auth}@` : ''}${hosts.join('')}${u.path}`;
+      return `${u.protocol}//${u.auth ? `${u.auth}@` : ''}${hosts.join(',')}${u.path}`;
     });
 }
 
