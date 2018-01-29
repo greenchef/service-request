@@ -8,7 +8,7 @@
     "test": "mocha --recursive"
   },
   "author": "GreenChef",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "dependencies": {
     "mongoose": "^4.11.0",
     "node-dns": "^0.1.0",

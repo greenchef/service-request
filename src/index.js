@@ -108,6 +108,6 @@ module.exports.connectToAgenda = (uri, agenda) => (
 );
 
 if (process.env.OVERRIDE_DNS) {
-  console.log('using alternate nameserver:', process.env.OVERRIDE_DNS);
+  logger.info(`using alternate nameserver: ${process.env.OVERRIDE_DNS}`);
   dns.setServers([process.env.OVERRIDE_DNS]);
 }
