@@ -39,16 +39,16 @@ function getHosts(hostname) {
 /**
 * Given HTTP request options, returns the first host url that matches
 * @param {Object} opts - HTTP request options
-* @return {string} The first host url
+* @return {string} The host url
 */
 function getHostUrl(opts) {
   const u = module.exports.getParsedUrl(opts);
 
   return getHosts(u.hostname)
-    .then(([firstHost] = []) => {
-      if (!firstHost) throw Error(`No valid host found for url: ${u}`);
+    .then((hosts = []) => {
+      if (!hosts) throw Error(`No valid host found for url: ${u}`);
 
-      return `${u.protocol}//${u.auth ? `${u.auth}@` : ''}${firstHost}${u.path}`;
+      return `${u.protocol}//${u.auth ? `${u.auth}@` : ''}${hosts.join('')}${u.path}`;
     });
 }
 
@@ -70,6 +70,8 @@ function resolveUri(opts) {
     }));
 }
 
+// NOTE: I can't find anywhere we are actually using this...
+// (checked greenchef/shipping/service-request)
 module.exports.resolveRequest = (opts) => (
   resolveUri(opts)
     .otherwise(() => opts)
