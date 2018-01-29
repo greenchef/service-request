@@ -35,6 +35,7 @@ return when(service.resolveRequest(requestOptions))
 First: `npm install`
 
 ## Testing
+
 To run: `npm test`
 
 New spec files need to be in the `/test` directory.
