@@ -1,19 +1,30 @@
 {
   "name": "@greenchef/service-request",
-  "version": "1.0.4",
-  "description": "",
+  "version": "1.1.0",
+  "description": "A helper package for service connections and request resolutions.",
+  "author": "GreenChef",
+  "license": "UNLICENSED",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src -d dist",
+    "test": "npm run build && mocha --recursive"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "mongoose": "^4.11.0",
     "node-dns": "^0.1.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "url": "^0.11.0",
-    "when": "^3.7.8"
+    "when": "^3.7.8",
+    "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-airbnb": "^2.4.0",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.1"
   }
 }

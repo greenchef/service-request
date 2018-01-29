@@ -7,25 +7,42 @@ Centralized functionality for connecting to services.
 4. Add the require statement to your files: `require('@greenchef/service-request')`
 
 # Using This Module
+
 ## Agenda
 ```
-var agenda = require('./lib/agenda');
-var service = require('@greenchef/service-request');
-return when(service.connectToAgenda('your-uri-here',agenda))
+const agenda = require('./lib/agenda');
+const service = require('@greenchef/service-request');
+return when(service.connectToAgenda('your-uri-here', agenda))
   .then(() => { ... });
 ```
+
 ## Mongo
 ```
-var service = require('@greenchef/service-request');
+const service = require('@greenchef/service-request');
 return when(service.connectToMongo('your-uri-here'))
   .then(() => { ... });
 ```
+
 ## Request
 ```
-var service = require('@greenchef/service-request');
-return when(service.resolveRequest('your-uri-here'))
-  .then(() => { ... });
+const service = require('@greenchef/service-request');
+return when(service.resolveRequest(requestOptions))
+  .then((resolution) => { ... });
 ```
+
+# Working with this Module
+
+First: `npm install`
+
+## Testing
+
+To run: `npm test`
+
+New spec files need to be in the `/test` directory.
+
+## Building
+
+`npm run build`
 
 # More NPM info
 https://confluence.greenchef.com/x/h418
