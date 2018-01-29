@@ -37,34 +37,36 @@ function getHosts(hostname) {
 }
 
 /**
-* Given HTTP request options, returns the list of host urls that match
+* Given HTTP request options, returns the first host url that matches
 * @param {Object} opts - HTTP request options
-* @return {string[]} The host urls
+* @return {string} The first host url
 */
-function getHostUrls(opts) {
+function getHostUrl(opts) {
   const u = module.exports.getParsedUrl(opts);
 
   return getHosts(u.hostname)
-    .then(hosts => {
-      if (!hosts) return [];
+    .then(([firstHost] = []) => {
+      if (!firstHost) throw Error(`No valid host found for url: ${u}`);
 
-      return hosts.map(host => `${u.protocol}//${u.auth ? `${u.auth}@` : ''}${host}${u.path}`);
+      return `${u.protocol}//${u.auth ? `${u.auth}@` : ''}${firstHost}${u.path}`;
     });
 }
 
+/**
+* Given request options returns the options with a resolved uri/url using dns
+* @param {Object} opts - HTTP request options
+* @return {Object} HTTP request options with resolved uri/url from dns
+*/
 function resolveUri(opts) {
-  const u = module.exports.getParsedUrl(opts);
-
   // Was told to keep for future Saph and Kevin work
   // if (process.env.ENVIRONMENT_NAME) {
   //   host = process.env.ENVIRONMENT_NAME + '.' + host;
   // }
 
-  return getHosts(u.hostname)
-    .then(hosts => `${u.protocol}//${u.auth ? `${u.auth}@` : ''}${hosts.join(',')}${u.path}`)
-    .then(host => ({
+  return getHostUrl(opts)
+    .then(hostUrl => ({
       ...opts,
-      [module.exports.uriOrUrlKey(opts)]: host,
+      [module.exports.uriOrUrlKey(opts)]: hostUrl,
     }));
 }
 
@@ -72,20 +74,6 @@ module.exports.resolveRequest = (opts) => (
   resolveUri(opts)
     .otherwise(() => opts)
     .then(options => when(request(options)))
-);
-
-module.exports.resolveRequestForAllHosts = (opts) => (
-  getHostUrls(opts)
-    .then(hostUrls => ( // Map hostUrls to opts array
-      hostUrls.map(hostUrl => ({
-        ...opts,
-        [module.exports.uriOrUrlKey(opts)]: hostUrl,
-      }))
-    ))
-    .then(optsArray => when.map(optsArray, request))
-    .otherwise(err => {
-      logger.warn('Failed to resolve request for all hosts. Error: %s', err);
-    })
 );
 
 function resolveMongoUri(uri) {

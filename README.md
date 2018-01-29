@@ -7,6 +7,7 @@ Centralized functionality for connecting to services.
 4. Add the require statement to your files: `require('@greenchef/service-request')`
 
 # Using This Module
+
 ## Agenda
 ```
 const agenda = require('./lib/agenda');
@@ -14,26 +15,19 @@ const service = require('@greenchef/service-request');
 return when(service.connectToAgenda('your-uri-here', agenda))
   .then(() => { ... });
 ```
+
 ## Mongo
 ```
 const service = require('@greenchef/service-request');
 return when(service.connectToMongo('your-uri-here'))
   .then(() => { ... });
 ```
-## Request
 
-*resolveRequest*
+## Request
 ```
 const service = require('@greenchef/service-request');
 return when(service.resolveRequest(requestOptions))
   .then((resolution) => { ... });
-```
-
-*resolveRequestForAllHosts*
-```
-const service = require('@greenchef/service-request');
-return when(service.resolveRequestForAllHosts(requestOptions))
-  .then((resolutions) => { ... });
 ```
 
 # Working with this Module
