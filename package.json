@@ -2,13 +2,13 @@
   "name": "@greenchef/service-request",
   "version": "1.1.0",
   "description": "A helper package for service connections and request resolutions.",
+  "author": "GreenChef",
+  "license": "UNLICENSED",
   "main": "index.js",
   "scripts": {
     "build": "babel src -d dist",
     "test": "mocha --recursive"
   },
-  "author": "GreenChef",
-  "license": "UNLICENSED",
   "dependencies": {
     "mongoose": "^4.11.0",
     "node-dns": "^0.1.0",
